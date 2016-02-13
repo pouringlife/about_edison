@@ -26,8 +26,10 @@ opkg install kernel-module-aufs kernel-module-bcm-bt-lpm kernel-module-g-multi k
 
 opkg install --force-reinstall kernel-module-bcm4334x
 
-mount /dev/mmcblk1p2 /mnt
-cp -r /mnt/home/usr/src/linux-headers-3.10.17-yocto-standard /usr/src/
+ar x /home/root/about_edison/linux-headers-3.10.17-yocto-standard_1.1_i386.deb
+tar x -f /home/root/about_edison/data.tar.xz
+cp -r /home/root/about_edison/usr/src/linux-headers-3.10.17-yocto-standard /usr/src/
+rm /lib/modules/$(uname -r)/build
 ln -s /usr/src/linux-headers-3.10.17-yocto-standard /lib/modules/$(uname -r)/build
 git clone https://git.open-mesh.org/batman-adv.git /home/root/batman-adv
 make --directory /home/root/batman-adv
@@ -38,5 +40,9 @@ echo -e "[Unit]\nDescription=awst\nAfter=rc-local.service \n[Service]\nType=simp
 chmod 777 /lib/systemd/system/awst.service
 systemctl enable awst.service
 rm /home/root/init.sh
-echo -e "#!/bin/bash\nrfkill unblock bluetooth\nhciconfig hci0 up \nwpa_cli -i wlan0 disconnect\nifconfig wlan0 mtu 1532\niwconfig wlan0 enc off\niwconfig wlan0 mode Ad-hoc essid Edison_adhoc ap 02:12:34:56:78:9A channel 1\nmodprobe batman-adv\nbatctl if add wlan0\nifconfig wlan0 up\nifconfig bat0 up\ndet=$(dmesg | grep "Notifying OTG driver")\nif [ -n "$det" ]; then\nbrctl addbr bridge-link\nbrctl addif bridge-link bat0\nbrctl addif bridge-link usb0\nudhcpc -i bridge-link -S\nelse\nudhcpc -i bat0 -S\nfi" >> /home/root/init.sh
+echo -e "#!/bin/bash\nrfkill unblock bluetooth\nhciconfig hci0 up \nwpa_cli -i wlan0 disconnect\nifconfig wlan0 mtu 1532\niwconfig wlan0 enc off\niwconfig wlan0 mode Ad-hoc essid Edison_adhoc ap 02:12:34:56:78:9A channel 1\nmodprobe batman-adv\nbatctl if add wlan0\nifconfig wlan0 up\nifconfig bat0 up\ndet=$(dmesg | grep "Notifying OTG driver")\nif [ -n "$det" ]; then\nbrctl addbr bridge-link\nbrctl addif bridge-link bat0\nbrctl addif bridge-link usb0\nudhcpc -i bridge-link -S\nelse\nudhcpc -i bat0 -S\nfi\nnode /home/root/about_edison/ibeacon.js" >> /home/root/init.sh
 chmod 777 /home/root/init.sh
+
+opkg install nodejs
+npm install noble
+npm install socket.io-client
