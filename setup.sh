@@ -27,8 +27,8 @@ opkg install kernel-module-aufs kernel-module-bcm-bt-lpm kernel-module-g-multi k
 opkg install --force-reinstall kernel-module-bcm4334x
 
 ar x /home/root/about_edison/linux-headers-3.10.17-yocto-standard_1.1_i386.deb
-tar x -f /home/root/about_edison/data.tar.xz
-cp -r /home/root/about_edison/usr/src/linux-headers-3.10.17-yocto-standard /usr/src/
+tar x -f /home/root/data.tar.xz
+mv /home/root/usr/src/linux-headers-3.10.17-yocto-standard /usr/src/
 rm /lib/modules/3.10.17-yocto-standard/build
 ln -s /usr/src/linux-headers-3.10.17-yocto-standard /lib/modules/3.10.17-yocto-standard/build
 git clone https://git.open-mesh.org/batman-adv.git /home/root/batman-adv
