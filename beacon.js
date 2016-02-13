@@ -39,10 +39,10 @@ var noble = require('noble');
   function scan(state){
     if (state === 'poweredOn') {
       noble.startScanning([],true);
-      console.log("Started scanning");
+//      console.log("Started scanning");
     } else {
       noble.stopScanning();
-      console.log("Is Bluetooth on?");
+//      console.log("Is Bluetooth on?");
     }
   }
 
@@ -68,7 +68,7 @@ var noble = require('noble');
 
               var beacon_name = 'bc'+minor_value+'-'+peripheral.uuid;
 
-              console.log(beacon_name+"이 새롭게 발견되었습니다.");
+ //             console.log(beacon_name+"이 새롭게 발견되었습니다.");
               beacons_uuid[beacon_name] = peripheral.uuid;
               beacons_name[peripheral.uuid] = beacon_name;
               beacons_name_by_minor[minor_value] = beacon_name;
@@ -87,7 +87,7 @@ var noble = require('noble');
 
 //              updated_rssi[beacons_name[peripheral.uuid]]=peripheral.rssi;
               io.emit('device_connect',device_info);
-              console.log("지금까지 비콘이 "+beacons_count+"개 발견 되었습니다.");
+//              console.log("지금까지 비콘이 "+beacons_count+"개 발견 되었습니다.");
               beacons[peripheral.uuid] = peripheral;
             }
 
@@ -95,7 +95,7 @@ var noble = require('noble');
               updated_rssi[beacons_name[peripheral.uuid]]=peripheral.rssi;
               pulse_obj.data[1].rssi = updated_rssi;
               io.emit('dataPulse',pulse_obj);
-              console.log(pulse_obj.data);
+//              console.log(pulse_obj.data);
               for ( x in updated_rssi){
                 updated_rssi[x] = null;
               }
@@ -103,8 +103,8 @@ var noble = require('noble');
             }
 
         } else {
-           console.log("다른 기기를 찾았습니다. UUID 는 "+ peripheral.uuid+"입니다.");
-           console.log("LOCALNAME : "+ peripheral.advertisement.localName);
+//           console.log("다른 기기를 찾았습니다. UUID 는 "+ peripheral.uuid+"입니다.");
+//           console.log("LOCALNAME : "+ peripheral.advertisement.localName);
         }
       }
     }
