@@ -60,3 +60,4 @@ mv /home/root/about_edison/awst.service /lib/systemd/system/awst.service
 chmod 777 /lib/systemd/system/awst.service
 systemctl enable awst.service
 chmod 777 /home/root/about_edison/init.sh
+chmod 777 /home/root/about_edison/wpacli_ibss.sh
