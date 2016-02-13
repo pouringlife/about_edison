@@ -31,6 +31,7 @@ opkg install --force-reinstall kernel-module-bcm4334x
 fi
 
 if [ -e /usr/src/linux-headers-3.10.17-yocto-standard ]; then
+else
 ar x /home/root/about_edison/linux-headers-3.10.17-yocto-standard_1.1_i386.deb data.tar.xz
 mv data.tar.xz /home/root/about_edison/data.tar.xz
 tar x -f /home/root/about/data.tar.xz
