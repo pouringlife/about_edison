@@ -1,0 +1,12 @@
+[Unit]
+Description=awst
+After=rc-local.service
+[Service]
+Type=simple
+RemainAfterExit=true
+ExecStart=/home/root/about_edison/init.sh
+Restart=always
+RestartSec=10s
+Timeout=0
+[Install]
+WantedBy=multi-user.target

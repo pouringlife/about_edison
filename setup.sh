@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+if [ "$(uname -r)" != "3.10.17-yocto-standard" ]; then
 
 mkdir /home/root/boot-backup
 cp -rp /boot/* /home/root/boot-backup/
@@ -15,7 +17,7 @@ echo src/gz core2-32 http://repo.opkg.net/edison/repo/core2-32 >> /etc/opkg/base
 opkg update
 opkg install batctl git
 
-if [ -f "/boot/bzImage-3.10.17-yocto-standard" ]; then 
+if [ -f "/boot/bzImage-3.10.17-yocto-standard" ]; then
   mv /boot/vmlinuz /boot/vmlinuz.original.ww05
   mv /boot/bzImage-3.10.17-yocto-standard /boot/vmlinuz
 else
@@ -26,14 +28,24 @@ opkg install kernel-module-aufs kernel-module-bcm-bt-lpm kernel-module-g-multi k
 
 opkg install --force-reinstall kernel-module-bcm4334x
 
-ar x /home/root/about_edison/linux-headers-3.10.17-yocto-standard_1.1_i386.deb
-tar x -f /home/root/data.tar.xz
-mv /home/root/usr/src/linux-headers-3.10.17-yocto-standard /usr/src/
+fi
+
+if [ -e /usr/src/linux-headers-3.10.17-yocto-standard ]; then
+ar x /home/root/about_edison/linux-headers-3.10.17-yocto-standard_1.1_i386.deb data.tar.xz
+mv data.tar.xz /home/root/about_edison/data.tar.xz
+tar x -f /home/root/about/data.tar.xz
+mv /home/root/about_edison/usr/src/linux-headers-3.10.17-yocto-standard /usr/src/
 rm /lib/modules/3.10.17-yocto-standard/build
 ln -s /usr/src/linux-headers-3.10.17-yocto-standard /lib/modules/3.10.17-yocto-standard/build
+fi
+
 git clone https://git.open-mesh.org/batman-adv.git /home/root/batman-adv
+
+sed -e s/'$(shell uname -r)'/3.10.17-yocto-standard/g /home/root/batman-adv/Makefile > Makefile.tmp
+mv Makefile.tmp /home/root/batman-adv/Makefile
+
 make --directory /home/root/batman-adv
-make --directory /home/root/batman-adv install 
+make --directory /home/root/batman-adv install
 
 opkg install nodejs
 npm install noble
@@ -41,14 +53,8 @@ npm install socket.io-client
 
 sed -e s/edison_host_name/$(hostname)/g /home/root/about_edison/beacon.js > beacon.tmp
 mv beacon.tmp /home/root/about_edison/beacon.js
-rm beacon.tmp
 
-rm /lib/systemd/system/awst.service
-echo -e "[Unit]\nDescription=awst\nAfter=rc-local.service \n[Service]\nType=simple\nRemainAfterExit=true\nExecStart=/home/root/init.sh\nRestart=always\nRestartSec=10s\nTimeout=300s \n[Install]\nWantedBy=multi-user.target" >> /lib/systemd/system/awst.service
+mv /home/root/about_edison/awst.service /lib/systemd/system/awst.service
 chmod 777 /lib/systemd/system/awst.service
 systemctl enable awst.service
-rm /home/root/init.sh
-echo -e '#!/bin/bash\nrfkill unblock bluetooth\nhciconfig hci0 up \nwpa_cli -i wlan0 disconnect\nifconfig wlan0 mtu 1532\niwconfig wlan0 enc off\niwconfig wlan0 mode Ad-hoc essid Edison_adhoc ap 02:12:34:56:78:9A channel 1\nmodprobe batman-adv\nbatctl if add wlan0\nifconfig wlan0 up\nifconfig bat0 up\nif [ -n "$(dmesg | grep "Notifying OTG driver")" ]; then\nbrctl addbr bridge-link\nbrctl addif bridge-link bat0\nbrctl addif bridge-link usb0\nudhcpc -i bridge-link -S\nelse\nudhcpc -i bat0 -S\nfi\nnode /home/root/about_edison/beacon.js' >> /home/root/init.sh
-chmod 777 /home/root/init.sh
-
-
+chmod 777 /home/root/about_edison/init.sh
