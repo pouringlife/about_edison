@@ -40,9 +40,12 @@ echo -e "[Unit]\nDescription=awst\nAfter=rc-local.service \n[Service]\nType=simp
 chmod 777 /lib/systemd/system/awst.service
 systemctl enable awst.service
 rm /home/root/init.sh
-echo -e "#!/bin/bash\nrfkill unblock bluetooth\nhciconfig hci0 up \nwpa_cli -i wlan0 disconnect\nifconfig wlan0 mtu 1532\niwconfig wlan0 enc off\niwconfig wlan0 mode Ad-hoc essid Edison_adhoc ap 02:12:34:56:78:9A channel 1\nmodprobe batman-adv\nbatctl if add wlan0\nifconfig wlan0 up\nifconfig bat0 up\ndet=$(dmesg | grep "Notifying OTG driver")\nif [ -n "$det" ]; then\nbrctl addbr bridge-link\nbrctl addif bridge-link bat0\nbrctl addif bridge-link usb0\nudhcpc -i bridge-link -S\nelse\nudhcpc -i bat0 -S\nfi\nnode /home/root/about_edison/ibeacon.js" >> /home/root/init.sh
+echo -e "#!/bin/bash\nrfkill unblock bluetooth\nhciconfig hci0 up \nwpa_cli -i wlan0 disconnect\nifconfig wlan0 mtu 1532\niwconfig wlan0 enc off\niwconfig wlan0 mode Ad-hoc essid Edison_adhoc ap 02:12:34:56:78:9A channel 1\nmodprobe batman-adv\nbatctl if add wlan0\nifconfig wlan0 up\nifconfig bat0 up\ndet=$(dmesg | grep "Notifying OTG driver")\nif [ -n "$det" ]; then\nbrctl addbr bridge-link\nbrctl addif bridge-link bat0\nbrctl addif bridge-link usb0\nudhcpc -i bridge-link -S\nelse\nudhcpc -i bat0 -S\nfi\nnode /home/root/about_edison/beacon.js" >> /home/root/init.sh
 chmod 777 /home/root/init.sh
 
 opkg install nodejs
 npm install noble
 npm install socket.io-client
+
+sed -e s/edison_host_name/$(hostname)/g /home/root/about_edison/beacon.js > beacon.js.tmp
+mv beacon.js.tmp beacon.js
