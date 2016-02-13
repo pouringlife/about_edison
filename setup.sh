@@ -43,7 +43,7 @@ sed -e s/edison_host_name/$(hostname)/g /home/root/about_edison/beacon.js > beac
 mv beacon.js.tmp beacon.js
 
 rm /lib/systemd/system/awst.service
-echo -e "[Unit]\nDescription=awst\nAfter=rc-local.service \n[Service]\nType=simple\nRemainAfterExit=true\nExecStart=/home/root/init.sh\nRestart=always\nRestartSec=10s\nTimeout=20s \n[Install]\nWantedBy=multi-user.target" >> /lib/systemd/system/awst.service
+echo -e "[Unit]\nDescription=awst\nAfter=rc-local.service \n[Service]\nType=simple\nRemainAfterExit=true\nExecStart=/home/root/init.sh\nRestart=always\nRestartSec=10s\nTimeout=300s \n[Install]\nWantedBy=multi-user.target" >> /lib/systemd/system/awst.service
 chmod 777 /lib/systemd/system/awst.service
 systemctl enable awst.service
 rm /home/root/init.sh
