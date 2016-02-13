@@ -39,8 +39,9 @@ opkg install nodejs
 npm install noble
 npm install socket.io-client
 
-sed -e s/edison_host_name/$(hostname)/g /home/root/about_edison/beacon.js > beacon.js.tmp
-mv beacon.js.tmp beacon.js
+sed -e s/edison_host_name/$(hostname)/g /home/root/about_edison/beacon.js > beacon.tmp
+mv beacon.tmp /home/root/about_edison/beacon.js
+rm beacon.tmp
 
 rm /lib/systemd/system/awst.service
 echo -e "[Unit]\nDescription=awst\nAfter=rc-local.service \n[Service]\nType=simple\nRemainAfterExit=true\nExecStart=/home/root/init.sh\nRestart=always\nRestartSec=10s\nTimeout=300s \n[Install]\nWantedBy=multi-user.target" >> /lib/systemd/system/awst.service
