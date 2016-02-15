@@ -64,4 +64,4 @@ chmod 777 /home/root/about_edison/wpacli_ibss.sh
 
 rm -r /home/root/usr
 rm -r /home/root/lib
-rn -r /home/root/batman-adv
+rm -r /home/root/batman-adv
