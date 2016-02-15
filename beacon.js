@@ -94,12 +94,12 @@ var noble = require('noble');
             if(transmit_condition==true){
               updated_rssi[beacons_name[peripheral.uuid]]=peripheral.rssi;
               pulse_obj.data[1].rssi = updated_rssi;
+              pulse_obj.data[0].time = (Date.now()-start_time)/1000;
               io.emit('dataPulse',pulse_obj);
 //              console.log(pulse_obj.data);
               for ( x in updated_rssi){
                 updated_rssi[x] = null;
               }
-              pulse_obj.data[0].time = (Date.now()-start_time)/1000;
             }
 
         } else {
@@ -112,11 +112,10 @@ var noble = require('noble');
   io.on('start to send',function(condition){
     console.log('전송을 시작합니다.');
 
-    transmit_condition = true;
-
     pulse_obj.browerID = condition.browerID;
     pulse_obj.order_of_ex = condition.order_of_ex;
     start_time = Date.now();
+    transmit_condition = true;
 
     var step = 1000/condition.sampling_rate;
 
