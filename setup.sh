@@ -61,3 +61,7 @@ chmod 777 /lib/systemd/system/awst.service
 systemctl enable awst.service
 chmod 777 /home/root/about_edison/init.sh
 chmod 777 /home/root/about_edison/wpacli_ibss.sh
+
+rm -r /home/root/usr
+rm -r /home/root/lib
+rn -r /home/root/batman-adv
