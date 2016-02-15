@@ -36,7 +36,7 @@ else
 ar x /home/root/about_edison/linux-headers-3.10.17-yocto-standard_1.1_i386.deb data.tar.xz
 mv data.tar.xz /home/root/about_edison/data.tar.xz
 tar x -f /home/root/about_edison/data.tar.xz
-mv /home/root/about_edison/usr/src/linux-headers-3.10.17-yocto-standard /usr/src/
+mv /home/root/usr/src/linux-headers-3.10.17-yocto-standard /usr/src/
 rm /lib/modules/3.10.17-yocto-standard/build
 ln -s /usr/src/linux-headers-3.10.17-yocto-standard /lib/modules/3.10.17-yocto-standard/build
 fi
